@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>niRvAG — AI-Powered Customer Support</title>
+  <meta name="description" content="niRvAG is an intelligent customer support platform powered by AI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            border: 'hsl(var(--border))',
+            input: 'hsl(var(--input))',
+            ring: 'hsl(var(--ring))',
+            background: 'hsl(var(--background))',
+            foreground: 'hsl(var(--foreground))',
+            primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+            secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
+            destructive: { DEFAULT: 'hsl(var(--destructive))', foreground: 'hsl(var(--destructive-foreground))' },
+            muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
+            accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
+            card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' }
+          },
+          borderRadius: { lg: 'var(--radius)', md: 'calc(var(--radius) - 2px)', sm: 'calc(var(--radius) - 4px)' }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 10% 3.9%;
+        --radius: 0.5rem;
+      }
+      .dark {
+        --background: 240 10% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 240 10% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 240 10% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 240 5.9% 10%;
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 240 3.7% 15.9%;
+        --muted-foreground: 240 5% 64.9%;
+        --accent: 240 3.7% 15.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 240 4.9% 83.9%;
+      }
+    }
+    @layer base {
+      * { @apply border-border; }
+      body { @apply bg-background text-foreground antialiased tracking-tight relative; }
+    }
+    .bg-grid {
+      background-size: 40px 40px;
+      background-image: linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+      mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    }
+    .dark .bg-grid {
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+    }
+    .mockup-pulse { animation: m-pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    @keyframes m-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+  </style>
+  <link rel="stylesheet" href="css/chat.css" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body class="flex min-h-screen flex-col">
+  <div class="fixed inset-0 z-[-1] bg-background">
+    <div class="absolute inset-0 bg-grid"></div>
+  </div>
+
+  <header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <div class="container mx-auto flex h-14 items-center justify-between px-4 md:px-8">
+      <a href="/" class="flex items-center gap-2 font-bold text-lg">
+        <i data-lucide="bot" class="w-6 h-6 text-foreground"></i>
+        <span>niRvAG</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-6 text-sm font-medium text-muted-foreground">
+        <a href="#features" class="transition-colors hover:text-foreground">Features</a>
+        <a href="#how-it-works" class="transition-colors hover:text-foreground">How It Works</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <button onclick="toggleTheme()" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 w-9">
+          <i data-lucide="moon" id="themeIcon" class="w-4 h-4"></i>
+        </button>
+        <a href="pages/login.html" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 px-4">Sign In</a>
+        <a href="pages/login.html" class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 shadow h-9 px-4">Get Started</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <!-- Hero Section -->
+    <section class="container mx-auto px-4 md:px-8 pt-24 pb-16 md:pt-32 md:pb-24 flex flex-col items-center text-center">
+      <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-secondary text-secondary-foreground mb-8">
+        <span class="flex h-2 w-2 rounded-full bg-primary/70 mr-2 mockup-pulse"></span>
+        AI-Powered Support Platform
+      </div>
+      <h1 class="text-4xl font-extrabold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl mb-6 max-w-[900px]">
+        Customer Support, <br class="hidden sm:inline" />
+        <span class="text-muted-foreground">Reimagined with AI</span>
+      </h1>
+      <p class="max-w-[700px] text-lg text-muted-foreground mb-10 md:text-xl">
+        niRvAG uses advanced AI to understand intent and sentiment, auto-create support tickets, route them to the right agents, and resolve issues faster than ever.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 mb-20 w-full sm:w-auto">
+        <button onclick="openChatWidget()" class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 shadow h-11 px-8">
+          <i data-lucide="message-square-plus" class="mr-2 h-4 w-4"></i>
+          Start a Conversation
+        </button>
+        <a href="#features" class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
+          Learn More
+        </a>
+      </div>
+
+      <!-- Hero Visual / Mockup -->
+      <div class="w-full max-w-3xl rounded-xl border bg-card text-card-foreground shadow-lg mx-auto overflow-hidden">
+        <div class="flex items-center gap-2 border-b bg-muted/40 p-3 px-4">
+          <div class="flex gap-1.5">
+            <div class="w-3 h-3 rounded-full bg-destructive/80"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+          </div>
+          <div class="mx-auto text-xs font-medium text-muted-foreground mr-8">niRvAG Support</div>
+        </div>
+        <div class="p-6 space-y-4 text-left">
+          <div class="flex flex-row-reverse gap-3 items-start">
+            <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-xs font-bold text-secondary-foreground border">P</div>
+            <div class="bg-primary text-primary-foreground px-4 py-2.5 rounded-2xl rounded-tr-md text-sm max-w-[80%] shadow-sm">
+              My order #1234 hasn't arrived yet. It's been 5 days.
+            </div>
+          </div>
+          <div class="flex gap-3 items-start">
+            <div class="w-8 h-8 rounded-full border bg-background flex items-center justify-center shadow-sm">
+              <i data-lucide="bot" class="w-4 h-4 text-foreground"></i>
+            </div>
+            <div class="bg-muted px-4 py-2.5 rounded-2xl rounded-tl-md text-sm max-w-[80%] border">
+              I'm sorry about the delay. I've created a <span class="font-semibold text-foreground">priority ticket</span> for your order and assigned it to our shipping team.
+            </div>
+          </div>
+          
+          <div class="ml-11 border rounded-lg p-4 max-w-[280px] bg-background shadow-sm space-y-3">
+            <div class="flex justify-between items-center text-sm font-semibold border-b pb-2">
+              <span class="flex items-center text-foreground"><i data-lucide="check-circle-2" class="w-4 h-4 mr-1 text-primary"></i> Ticket Created</span>
+              <span class="text-xs text-muted-foreground tracking-wider">#1043</span>
+            </div>
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-muted-foreground">Priority</span>
+              <span class="bg-destructive/10 text-destructive font-semibold px-2 py-0.5 rounded-full flex items-center"><div class="w-1.5 h-1.5 bg-destructive rounded-full mr-1.5"></div>High</span>
+            </div>
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-muted-foreground">Agent</span>
+              <span class="font-medium text-foreground">Ravi (Shipping)</span>
+            </div>
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-muted-foreground">Status</span>
+              <span class="bg-muted text-muted-foreground font-medium px-2 py-0.5 rounded border">Open</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="border-t bg-muted/30 py-20 md:py-32">
+      <div class="container mx-auto px-4 md:px-8">
+        <div class="mb-16 text-center">
+          <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground mb-4">Everything You Need for Exceptional Support</h2>
+          <p class="text-muted-foreground text-lg max-w-[600px] mx-auto">niRvAG combines AI intelligence with human empathy to deliver support that truly resonates.</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="rounded-xl border bg-card object-cover text-card-foreground shadow-sm p-6 hover:shadow-md transition-shadow">
+            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+              <i data-lucide="zap" class="w-5 h-5 text-primary"></i>
+            </div>
+            <h3 class="font-semibold text-lg mb-2">Instant AI Chat</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Customers get immediate, context-aware responses powered by Claude AI. No waiting in queues.</p>
+          </div>
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm p-6 hover:shadow-md transition-shadow">
+            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+              <i data-lucide="ticket" class="w-5 h-5 text-primary"></i>
+            </div>
+            <h3 class="font-semibold text-lg mb-2">Auto-Ticketing</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">AI detects issues and automatically creates, prioritizes, and routes tickets. Zero manual work.</p>
+          </div>
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm p-6 hover:shadow-md transition-shadow">
+            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+              <i data-lucide="smile-plus" class="w-5 h-5 text-primary"></i>
+            </div>
+            <h3 class="font-semibold text-lg mb-2">Sentiment Analysis</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Understands customer emotions in real-time and adjusts priority and routing accordingly.</p>
+          </div>
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm p-6 hover:shadow-md transition-shadow">
+            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+              <i data-lucide="workflow" class="w-5 h-5 text-primary"></i>
+            </div>
+            <h3 class="font-semibold text-lg mb-2">Smart Routing</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Tickets are intelligently assigned to agents based on expertise, workload, and issue type.</p>
+          </div>
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm p-6 hover:shadow-md transition-shadow">
+            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+              <i data-lucide="square-arrow-up" class="w-5 h-5 text-primary"></i>
+            </div>
+            <h3 class="font-semibold text-lg mb-2">Auto-Escalation</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Critical issues are escalated automatically when sentiment drops or resolution stalls.</p>
+          </div>
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm p-6 hover:shadow-md transition-shadow">
+            <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+              <i data-lucide="line-chart" class="w-5 h-5 text-primary"></i>
+            </div>
+            <h3 class="font-semibold text-lg mb-2">Analytics Dashboard</h3>
+            <p class="text-sm text-muted-foreground leading-relaxed">Real-time metrics on tickets, sentiment trends, agent performance, and resolution times.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-20 md:py-32">
+      <div class="container mx-auto px-4 md:px-8">
+        <div class="mb-16 text-center">
+          <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground mb-4">How niRvAG Works</h2>
+          <p class="text-muted-foreground text-lg max-w-[600px] mx-auto">From first message to resolution — a seamless, AI-driven experience.</p>
+        </div>
+        
+        <div class="flex flex-col md:flex-row gap-8 justify-center items-stretch relative">
+          <!-- Step 1 -->
+          <div class="flex-1 relative border rounded-xl p-8 bg-card shadow-sm text-center">
+            <div class="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold font-mono text-lg mx-auto mb-6">01</div>
+            <h3 class="font-semibold text-xl mb-3">Customer Chat</h3>
+            <p class="text-sm text-muted-foreground">Users quickly describe their problem. Our AI securely processes the message.</p>
+          </div>
+          
+          <div class="hidden md:flex items-center justify-center -mx-4 z-10 text-muted-foreground">
+            <i data-lucide="arrow-right" class="w-6 h-6"></i>
+          </div>
+          
+          <!-- Step 2 -->
+          <div class="flex-1 relative border rounded-xl p-8 bg-card shadow-sm text-center">
+            <div class="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold font-mono text-lg mx-auto mb-6">02</div>
+            <h3 class="font-semibold text-xl mb-3">AI Ticket Magic</h3>
+            <p class="text-sm text-muted-foreground">Intent and sentiment are analyzed instantly. A ticket is created with proper priority.</p>
+          </div>
+          
+          <div class="hidden md:flex items-center justify-center -mx-4 z-10 text-muted-foreground">
+            <i data-lucide="arrow-right" class="w-6 h-6"></i>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="flex-1 relative border rounded-xl p-8 bg-card shadow-sm text-center">
+            <div class="w-12 h-12 bg-primary/10 text-primary rounded-full flex items-center justify-center font-bold font-mono text-lg mx-auto mb-6">03</div>
+            <h3 class="font-semibold text-xl mb-3">Agent Resolves</h3>
+            <p class="text-sm text-muted-foreground">The most qualified agent instantly gets the ticket and responds via text or voice.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="border-t">
+      <div class="container mx-auto px-4 md:px-8 py-20 md:py-32 flex flex-col items-center text-center">
+        <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl text-foreground mb-4">Ready to Transform Support?</h2>
+        <p class="text-muted-foreground text-lg mb-8 max-w-[500px]">Join the next generation of customer service with niRvAG's AI-powered intelligent desk.</p>
+        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+          <button onclick="openChatWidget()" class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8 shadow">
+            Try niRvAG Now
+          </button>
+          <a href="pages/login.html" class="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8">
+            Sign In as Admin
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t py-12 bg-muted/20">
+    <div class="container mx-auto px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="flex items-center gap-2 font-semibold">
+        <i data-lucide="bot" class="w-5 h-5 text-foreground"></i>
+        <span>niRvAG &copy; 2026</span>
+      </div>
+      <div class="flex gap-6 text-sm text-muted-foreground">
+        <a href="#features" class="hover:text-foreground transition">Features</a>
+        <a href="#how-it-works" class="hover:text-foreground transition">Process</a>
+        <a href="pages/login.html" class="hover:text-foreground transition">Agent Dashboard</a>
+      </div>
+    </div>
+  </footer>
+
+  <div class="toast-container fixed top-4 right-4 z-[100]" id="toastContainer"></div>
+
+  <script src="js/api.js"></script>
+  <script src="js/chat.js"></script>
+  <!-- Removing home.js since we handled toggle logic inline here to avoid css conflicts -->
+  <script>
+    lucide.createIcons();
+    
+    // Theme toggle
+    const saved = localStorage.getItem('nirvag_theme') || 'light';
+    if (saved === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.getElementById('themeIcon').setAttribute('data-lucide', 'sun');
+    }
+    lucide.createIcons();
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      if (isDark) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('nirvag_theme', 'light');
+        document.getElementById('themeIcon').setAttribute('data-lucide', 'moon');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('nirvag_theme', 'dark');
+        document.getElementById('themeIcon').setAttribute('data-lucide', 'sun');
+      }
+      lucide.createIcons();
+    }
+
+    function openChatWidget() { document.getElementById('chatFab')?.click(); }
+  </script>
+</body>
+</html>

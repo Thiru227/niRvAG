@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — niRvAG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            border: 'hsl(var(--border))',
+            input: 'hsl(var(--input))',
+            ring: 'hsl(var(--ring))',
+            background: 'hsl(var(--background))',
+            foreground: 'hsl(var(--foreground))',
+            primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+            secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
+            destructive: { DEFAULT: 'hsl(var(--destructive))', foreground: 'hsl(var(--destructive-foreground))' },
+            muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
+            accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
+            card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' }
+          },
+          borderRadius: {
+            lg: 'var(--radius)', md: 'calc(var(--radius) - 2px)', sm: 'calc(var(--radius) - 4px)'
+          }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 10% 3.9%;
+        --radius: 0.5rem;
+      }
+      .dark {
+        --background: 240 10% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 240 10% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 240 10% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 240 5.9% 10%;
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 240 3.7% 15.9%;
+        --muted-foreground: 240 5% 64.9%;
+        --accent: 240 3.7% 15.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 240 4.9% 83.9%;
+      }
+    }
+    @layer base {
+      * { @apply border-border; }
+      body { @apply bg-background text-foreground antialiased tracking-tight; }
+    }
+  </style>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body class="min-h-screen flex items-center justify-center relative p-6">
+  
+  <button onclick="toggleTheme()" class="absolute top-6 right-6 p-2 rounded-md hover:bg-accent text-foreground transition duration-200">
+    <i data-lucide="moon" id="themeIcon" class="w-5 h-5"></i>
+  </button>
+
+  <div class="w-full max-w-[400px] flex flex-col items-center">
+    <a href="/" class="flex flex-col items-center gap-2 mb-8 group">
+      <div class="w-12 h-12 bg-primary text-primary-foreground rounded-xl flex items-center justify-center font-bold text-xl shadow-lg ring-1 ring-ring/10 group-hover:scale-105 transition-transform duration-200">
+        <i data-lucide="bot" class="w-6 h-6"></i>
+      </div>
+    </a>
+
+    <div class="w-full bg-card rounded-xl border border-border shadow-sm p-8">
+      <div class="flex flex-col space-y-1.5 text-center mb-8">
+        <h3 class="font-semibold tracking-tight text-2xl">Create an account</h3>
+        <p class="text-sm text-muted-foreground">Enter your email below to log into your account</p>
+      </div>
+
+      <div id="loginError" class="hidden mb-6 p-3 bg-destructive/15 text-destructive text-sm font-medium rounded-md border border-destructive/20 text-center"></div>
+
+      <form onsubmit="handleLogin(event)" class="space-y-4">
+        <div class="space-y-2">
+          <label for="loginEmail" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email</label>
+          <input type="email" id="loginEmail" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors" placeholder="m@example.com" required>
+        </div>
+        <div class="space-y-2">
+          <label for="loginPassword" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Password</label>
+          <input type="password" id="loginPassword" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors" placeholder="••••••••" required>
+        </div>
+        <button type="submit" id="loginBtn" class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full mt-2">
+          Sign In
+        </button>
+      </form>
+
+      <div class="mt-8 text-center text-sm">
+        <a href="/" class="text-muted-foreground hover:text-primary transition-colors inline-flex items-center gap-1">
+          <i data-lucide="arrow-left" class="w-3 h-3"></i>
+          Back to home
+        </a>
+      </div>
+    </div>
+
+    <div class="mt-6 w-full text-center space-y-2 text-xs text-muted-foreground">
+      <p>Demo Admin: <span class="font-mono text-foreground font-medium">admin@nirvag.com</span> / <span class="font-mono text-foreground font-medium">admin123</span></p>
+      <p>Demo Agent: <span class="font-mono text-foreground font-medium">agent@nirvag.com</span> / <span class="font-mono text-foreground font-medium">agent123</span></p>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // Theme initialization
+    const saved = localStorage.getItem('nirvag_theme') || 'light';
+    if (saved === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.getElementById('themeIcon').setAttribute('data-lucide', 'sun');
+    }
+    lucide.createIcons(); // re-render icon
+
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      if (isDark) {
+        document.documentElement.classList.remove('dark');
+        localStorage.setItem('nirvag_theme', 'light');
+        document.getElementById('themeIcon').setAttribute('data-lucide', 'moon');
+      } else {
+        document.documentElement.classList.add('dark');
+        localStorage.setItem('nirvag_theme', 'dark');
+        document.getElementById('themeIcon').setAttribute('data-lucide', 'sun');
+      }
+      lucide.createIcons();
+    }
+
+    if (Auth.isLoggedIn()) {
+      const role = Auth.getRole();
+      window.location.href = role === 'admin' ? '/pages/admin.html' : '/pages/attendee.html';
+    }
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const errEl = document.getElementById('loginError');
+      errEl.classList.add('hidden');
+      btn.disabled = true; 
+      btn.innerHTML = '<i data-lucide="loader-2" class="w-4 h-4 mr-2 animate-spin"></i> Signing in...';
+      lucide.createIcons();
+
+      try {
+        const data = await API.login(
+          document.getElementById('loginEmail').value,
+          document.getElementById('loginPassword').value
+        );
+        Auth.setAuth(data.access_token, data.user);
+        window.location.href = data.user.role === 'admin' ? '/pages/admin.html' : '/pages/attendee.html';
+      } catch (err) {
+        errEl.textContent = err.message || 'Invalid credentials';
+        errEl.classList.remove('hidden');
+        btn.disabled = false; 
+        btn.textContent = 'Sign In';
+      }
+    }
+  </script>
+</body>
+</html>

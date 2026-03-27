@@ -1,0 +1,113 @@
+{
+  "orders": [
+    {
+      "order_id": "ORD-1234",
+      "customer_name": "Rahul Mehta",
+      "customer_email": "test@test.com",
+      "items": [
+        {"name": "Bluetooth Speaker Mini", "qty": 1, "price": 39.99},
+        {"name": "LED Desk Lamp Pro", "qty": 1, "price": 59.99}
+      ],
+      "total": 99.98,
+      "status": "delayed",
+      "payment_method": "Credit Card (Visa)",
+      "tracking_id": "DH5647382910",
+      "ordered_at": "2026-03-18T10:30:00",
+      "estimated_delivery": "2026-03-23",
+      "new_estimated_delivery": "2026-03-28",
+      "delay_reason": "Weather disruption at transit hub — heavy rainfall in Maharashtra region"
+    },
+    {
+      "order_id": "ORD-1235",
+      "customer_name": "Anita Desai",
+      "customer_email": "anita@example.com",
+      "items": [
+        {"name": "Smart Watch X1", "qty": 1, "price": 199.99}
+      ],
+      "total": 199.99,
+      "status": "shipped",
+      "payment_method": "UPI (Google Pay)",
+      "tracking_id": "BW9283746510",
+      "ordered_at": "2026-03-22T14:15:00",
+      "estimated_delivery": "2026-03-28"
+    },
+    {
+      "order_id": "ORD-1236",
+      "customer_name": "Vikram Singh",
+      "customer_email": "vikram.s@example.com",
+      "items": [
+        {"name": "Wireless Earbuds Pro", "qty": 2, "price": 79.99},
+        {"name": "Wireless Charging Pad", "qty": 1, "price": 19.99}
+      ],
+      "total": 179.97,
+      "status": "delivered",
+      "payment_method": "Net Banking (HDFC)",
+      "tracking_id": "DL8374625190",
+      "ordered_at": "2026-03-15T09:00:00",
+      "estimated_delivery": "2026-03-20",
+      "delivered_at": "2026-03-19T16:45:00"
+    },
+    {
+      "order_id": "ORD-1237",
+      "customer_name": "Priyanka Das",
+      "customer_email": "priyanka.d@example.com",
+      "items": [
+        {"name": "Organic Cotton T-Shirt", "qty": 3, "price": 29.99},
+        {"name": "Stainless Steel Water Bottle", "qty": 2, "price": 24.99}
+      ],
+      "total": 139.95,
+      "status": "processing",
+      "payment_method": "Paytm Wallet",
+      "tracking_id": null,
+      "ordered_at": "2026-03-26T18:30:00",
+      "estimated_delivery": "2026-04-02"
+    },
+    {
+      "order_id": "ORD-1238",
+      "customer_name": "Mohammed Ali",
+      "customer_email": "mohammedali@example.com",
+      "items": [
+        {"name": "Running Shoes CloudX", "qty": 1, "price": 129.99},
+        {"name": "Yoga Mat Deluxe", "qty": 1, "price": 49.99}
+      ],
+      "total": 179.98,
+      "status": "cancelled",
+      "payment_method": "Credit Card (Mastercard)",
+      "tracking_id": null,
+      "ordered_at": "2026-03-20T12:00:00",
+      "cancelled_at": "2026-03-21T08:15:00",
+      "refund_status": "processed",
+      "refund_amount": 179.98
+    },
+    {
+      "order_id": "ORD-1239",
+      "customer_name": "Sunita Rao",
+      "customer_email": "sunita@example.com",
+      "items": [
+        {"name": "Premium Backpack", "qty": 1, "price": 89.99},
+        {"name": "LED Desk Lamp Pro", "qty": 1, "price": 59.99}
+      ],
+      "total": 149.98,
+      "status": "shipped",
+      "payment_method": "EMI (ICICI 3 months)",
+      "tracking_id": "CH6592837461",
+      "ordered_at": "2026-03-24T11:20:00",
+      "estimated_delivery": "2026-03-29"
+    },
+    {
+      "order_id": "ORD-1240",
+      "customer_name": "Test User",
+      "customer_email": "test@test.com",
+      "items": [
+        {"name": "Wireless Earbuds Pro", "qty": 1, "price": 79.99},
+        {"name": "Stainless Steel Water Bottle", "qty": 1, "price": 24.99}
+      ],
+      "total": 104.98,
+      "status": "shipped",
+      "payment_method": "UPI (PhonePe)",
+      "tracking_id": "MU7384920156",
+      "ordered_at": "2026-03-25T16:45:00",
+      "estimated_delivery": "2026-03-30"
+    }
+  ]
+}

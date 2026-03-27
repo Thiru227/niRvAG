@@ -1,0 +1,103 @@
+NIRVAG — FREQUENTLY ASKED QUESTIONS (FAQ)
+==========================================
+
+-- ORDERS & TRACKING --
+
+Q: How do I track my order?
+A: You can track your order by logging into your niRvAG account and visiting "My Orders". Alternatively, use the tracking link sent to your email after shipping. You can also ask our AI support assistant with your order number (e.g., ORD-1234) for instant tracking updates.
+
+Q: How long does delivery take?
+A: Standard delivery within India takes 5-7 business days. Express delivery (₹149) takes 2-3 business days. Same-day delivery is available in Bangalore, Mumbai, Delhi, Hyderabad, and Chennai for ₹299. International shipping takes 7-15 business days depending on the destination.
+
+Q: My order is delayed. What should I do?
+A: We apologize for the delay! Orders can occasionally be delayed due to weather, logistics issues, or high demand. Please contact our support team with your order number and we will immediately investigate and provide an updated delivery estimate. We also offer compensation for significant delays.
+
+Q: Can I change my delivery address after placing an order?
+A: Yes, you can change your delivery address within 2 hours of placing the order by contacting our support team. After the order has been shipped, address changes are not possible, but we can help arrange a redirect with the courier (additional charges may apply).
+
+Q: What happens if I'm not home during delivery?
+A: The courier will attempt delivery twice. If both attempts fail, the package will be held at the nearest courier hub for 7 days. You'll receive an SMS with pickup details. After 7 days, the package is returned to us and a full refund is initiated.
+
+-- RETURNS & REFUNDS --
+
+Q: What is your return policy?
+A: We offer a 30-day hassle-free return policy. Items must be unused, in original packaging with all tags attached. Electronics have a 15-day replacement window. Refunds are processed within 5-7 business days after we receive the returned item.
+
+Q: How do I initiate a return?
+A: Go to "My Orders" in your account, select the order, and click "Return/Exchange". Choose your reason, and we'll schedule a free pickup within 24-48 hours. You can also contact our support team for assistance.
+
+Q: When will I get my refund?
+A: Refunds are processed within 5-7 business days of receiving the returned item. Credit card refunds may take an additional 5-10 business days to reflect in your statement. UPI and wallet refunds are typically instant.
+
+Q: Can I exchange instead of return?
+A: Yes! For fashion items, you can exchange for a different size or color at no extra cost. For electronics, exchanges are available within 15 days for the same product or a different variant.
+
+Q: Do you offer store credit?
+A: Yes! If you prefer, we can issue store credit instead of a refund. Store credit is valid for 12 months and can be used on any purchase.
+
+-- PAYMENT --
+
+Q: What payment methods do you accept?
+A: We accept Credit/Debit Cards (Visa, Mastercard, Amex, RuPay), UPI (Google Pay, PhonePe, Paytm), Net Banking, Wallets, EMI options (0% on select banks for orders above ₹3,000), Buy Now Pay Later (Simpl, LazyPay), Gift Cards, and Cash on Delivery. International customers can pay via PayPal or Stripe.
+
+Q: Is it safe to pay on niRvAG?
+A: Absolutely! All transactions are secured with 256-bit SSL encryption and PCI DSS Level 1 compliance. We never store your card details on our servers. All payment processing is handled by RazorPay, a RBI-licensed payment gateway.
+
+Q: Can I pay in EMI?
+A: Yes! EMI options are available on orders above ₹3,000. We offer 0% EMI on select bank credit cards for 3, 6, and 12-month tenures. The EMI option will appear at checkout if your card is eligible.
+
+Q: My payment failed but money was debited. What do I do?
+A: Don't worry! Failed transaction amounts are automatically refunded within 5-7 business days. If you don't see the refund after 7 days, contact our support team with the transaction reference number and we'll escalate it immediately.
+
+-- PRODUCTS --
+
+Q: Are your products genuine?
+A: Yes! niRvAG only sells 100% authentic, genuine products. All electronics come with manufacturer warranty. We source directly from brands or authorized distributors. Every product undergoes our 3-stage quality check before shipping.
+
+Q: Do you offer product warranties?
+A: Yes! Electronics come with 1-year manufacturer warranty. You can also add niRvAG Care extended warranty (2 additional years) for ₹499 at checkout. Clothing has a 6-month warranty against manufacturing defects.
+
+Q: Can I get product recommendations?
+A: Yes! Ask our AI support assistant for personalized product recommendations based on your preferences, budget, and needs. You can also browse our "Trending" and "Editor's Picks" sections on the website.
+
+Q: How do I check product availability?
+A: Product availability is shown on each product page. If an item is out of stock, you can click "Notify Me" to get an email alert when it's back. You can also ask our support assistant about stock availability for any product.
+
+-- ACCOUNT --
+
+Q: How do I create an account?
+A: Visit nirvag.com and click "Sign Up". You can register using your email, Google account, or phone number. Account creation is free and gives you access to order tracking, wishlist, reward points, and faster checkout.
+
+Q: I forgot my password. How do I reset it?
+A: Click "Forgot Password" on the login page and enter your registered email. You'll receive a password reset link within 5 minutes. If you don't receive the email, check your spam folder or contact our support team.
+
+Q: How do I delete my account?
+A: You can request account deletion from Settings > Privacy > Delete Account. Please note that this action is irreversible and all your order history, reward points, and saved preferences will be permanently deleted. Account deletion is processed within 72 hours.
+
+Q: How do I update my email or phone number?
+A: Go to Settings > Profile and update your details. Email changes require verification via OTP sent to both old and new email addresses. Phone number changes require OTP verification.
+
+-- TECHNICAL SUPPORT --
+
+Q: The website/app is not loading properly.
+A: Please try: 1) Clear browser cache and cookies, 2) Try a different browser (Chrome, Firefox, Safari), 3) Disable ad blockers or VPN, 4) Check your internet connection. If the issue persists, contact our technical support team with a screenshot of the error.
+
+Q: I'm unable to log in to my account.
+A: Try resetting your password first. If you're getting a specific error, please note it down. Common issues include: typo in email, caps lock on, browser autofill entering wrong credentials. If nothing works, contact support with your registered email.
+
+Q: The app is crashing on my phone.
+A: Please update the niRvAG app to the latest version. If the app still crashes: 1) Clear app cache in your phone settings, 2) Uninstall and reinstall the app, 3) Ensure your phone has at least 200MB free storage. Contact support if the issue persists.
+
+-- GENERAL --
+
+Q: Do you have physical stores?
+A: Currently, niRvAG operates as an online-only store. However, we have Experience Centers in Bangalore, Mumbai, and Delhi where you can try products before buying. Walk-ins are welcome Monday to Saturday, 10 AM to 8 PM.
+
+Q: Do you deliver internationally?
+A: Yes! We deliver to 50+ countries. International shipping takes 7-15 business days. Shipping is free on orders above $100. Customs duties may apply based on your country's regulations.
+
+Q: How do I contact customer support?
+A: You can reach us through: 1) AI Chat Support (24/7 on our website), 2) Email: support@nirvag.com, 3) Phone: +91 80 4567 8900 (Mon-Sat 9AM-9PM IST), 4) WhatsApp: +91 98765 43210, 5) Social Media: @nirvag on Twitter, Instagram, Facebook.
+
+Q: Do you have a referral program?
+A: Yes! Share your unique referral code with friends. They get ₹200 off their first order, and you earn ₹150 in store credit for each successful referral. There's no limit on referrals!

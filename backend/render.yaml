@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: nirvah-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2
+    envVars:
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_USER
+        sync: false
+      - key: SMTP_PASS
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: CORS_ORIGIN
+        sync: false
+    disk:
+      name: chroma-store
+      mountPath: /opt/render/project/src/chroma_store
+      sizeGB: 1

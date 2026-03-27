@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — niRvAG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            border: 'hsl(var(--border))',
+            input: 'hsl(var(--input))',
+            ring: 'hsl(var(--ring))',
+            background: 'hsl(var(--background))',
+            foreground: 'hsl(var(--foreground))',
+            primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+            secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
+            destructive: { DEFAULT: 'hsl(var(--destructive))', foreground: 'hsl(var(--destructive-foreground))' },
+            muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
+            accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
+            card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' }
+          },
+          borderRadius: { lg: 'var(--radius)', md: 'calc(var(--radius) - 2px)', sm: 'calc(var(--radius) - 4px)' }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 10% 3.9%;
+        --radius: 0.5rem;
+      }
+      .dark {
+        --background: 240 10% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 240 10% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 240 10% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 240 5.9% 10%;
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 240 3.7% 15.9%;
+        --muted-foreground: 240 5% 64.9%;
+        --accent: 240 3.7% 15.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 240 4.9% 83.9%;
+      }
+    }
+    @layer base {
+      * { @apply border-border; }
+      body { @apply bg-background text-foreground antialiased tracking-tight h-dvh w-dvw overflow-hidden; }
+    }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+  </style>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body class="flex bg-muted/30">
+
+  <!-- Sidebar -->
+  <aside class="w-64 flex-shrink-0 border-r bg-background flex flex-col hidden md:flex h-full">
+    <div class="h-14 flex items-center gap-2 px-6 border-b font-semibold text-lg">
+      <div class="w-8 h-8 rounded bg-primary text-primary-foreground flex items-center justify-center">N</div>
+      <div class="flex flex-col leading-tight"><span class="text-sm">niRvAG</span><span class="text-[10px] text-muted-foreground uppercase tracking-widest">Admin Panel</span></div>
+    </div>
+    
+    <div class="flex-1 overflow-y-auto px-4 py-6 space-y-6">
+      <div class="space-y-1">
+        <h4 class="mb-2 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Overview</h4>
+        <button class="sidebar-link w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all bg-muted text-foreground" data-panel="dashboard" onclick="switchPanel('dashboard')">
+          <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+        </button>
+      </div>
+
+      <div class="space-y-1">
+        <h4 class="mb-2 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Management</h4>
+        <button class="sidebar-link w-full flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-muted hover:text-foreground text-muted-foreground" data-panel="tickets" onclick="switchPanel('tickets')">
+          <div class="flex items-center gap-3"><i data-lucide="ticket" class="w-4 h-4"></i> Tickets</div>
+          <span class="bg-primary text-primary-foreground text-[10px] px-1.5 py-0.5 rounded-full" id="ticketCountBadge">0</span>
+        </button>
+        <button class="sidebar-link w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-muted hover:text-foreground text-muted-foreground" data-panel="orders" onclick="switchPanel('orders')">
+          <i data-lucide="package" class="w-4 h-4"></i> Orders
+        </button>
+        <button class="sidebar-link w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-muted hover:text-foreground text-muted-foreground" data-panel="users" onclick="switchPanel('users')">
+          <i data-lucide="users" class="w-4 h-4"></i> Users
+        </button>
+      </div>
+
+      <div class="space-y-1">
+        <h4 class="mb-2 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Content</h4>
+        <button class="sidebar-link w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-muted hover:text-foreground text-muted-foreground" data-panel="products" onclick="switchPanel('products')">
+          <i data-lucide="shopping-bag" class="w-4 h-4"></i> Products
+        </button>
+        <button class="sidebar-link w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-muted hover:text-foreground text-muted-foreground" data-panel="documents" onclick="switchPanel('documents')">
+          <i data-lucide="file-text" class="w-4 h-4"></i> Documents
+        </button>
+      </div>
+
+      <div class="space-y-1">
+        <h4 class="mb-2 px-2 text-xs font-semibold text-muted-foreground uppercase tracking-wider">Config</h4>
+        <button class="sidebar-link w-full flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-all hover:bg-muted hover:text-foreground text-muted-foreground" data-panel="settings" onclick="switchPanel('settings')">
+          <i data-lucide="settings" class="w-4 h-4"></i> Settings
+        </button>
+      </div>
+    </div>
+
+    <div class="border-t p-4 flex items-center gap-3 relative group">
+      <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center font-bold text-xs" id="userAvatar">A</div>
+      <div class="flex flex-col flex-1 overflow-hidden">
+        <span class="text-sm font-medium truncate" id="userName">Admin</span>
+        <span class="text-xs text-muted-foreground truncate" id="userEmail">admin@nirvag.com</span>
+      </div>
+      <button onclick="logout()" class="text-muted-foreground hover:text-foreground transition absolute right-4 opacity-0 group-hover:opacity-100 bg-background p-1 rounded-md" aria-label="Logout">
+        <i data-lucide="log-out" class="w-4 h-4"></i>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col h-full overflow-hidden">
+    
+    <!-- Top Bar -->
+    <header class="h-14 border-b bg-background flex items-center justify-between px-6 flex-shrink-0">
+      <div>
+        <h2 class="text-sm font-semibold" id="greeting">Hello, Admin! 👋</h2>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="relative hidden sm:block">
+          <i data-lucide="search" class="w-4 h-4 absolute left-2.5 top-2.5 text-muted-foreground"></i>
+          <input type="text" placeholder="Search..." class="flex h-9 w-[250px] rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 pl-9">
+        </div>
+        <button onclick="toggleTheme()" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 w-9">
+          <i data-lucide="moon" id="themeIcon" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Page Content Container -->
+    <main class="flex-1 overflow-y-auto p-4 md:p-8 scrollbar-hide">
+      
+      <!-- Dashboard Panel -->
+      <div class="panel block" id="panel-dashboard">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold tracking-tight">Dashboard</h1>
+          <p class="text-muted-foreground">Overview of your support operations</p>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
+          <!-- Metric Cards -->
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm">
+            <div class="p-6 flex flex-row items-center justify-between pb-2">
+              <h3 class="tracking-tight text-sm font-medium">Total Tickets</h3>
+              <i data-lucide="ticket" class="w-4 h-4 text-muted-foreground"></i>
+            </div>
+            <div class="p-6 pt-0">
+              <div class="text-2xl font-bold" id="metricTotal">0</div>
+            </div>
+          </div>
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm">
+            <div class="p-6 flex flex-row items-center justify-between pb-2">
+              <h3 class="tracking-tight text-sm font-medium">Open Tickets</h3>
+              <i data-lucide="folder-open" class="w-4 h-4 text-muted-foreground"></i>
+            </div>
+            <div class="p-6 pt-0">
+              <div class="text-2xl font-bold" id="metricOpen">0</div>
+            </div>
+          </div>
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm">
+            <div class="p-6 flex flex-row items-center justify-between pb-2">
+              <h3 class="tracking-tight text-sm font-medium">Escalated</h3>
+              <i data-lucide="alert-triangle" class="w-4 h-4 text-destructive"></i>
+            </div>
+            <div class="p-6 pt-0">
+              <div class="text-2xl font-bold text-destructive" id="metricEscalated">0</div>
+            </div>
+          </div>
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm">
+            <div class="p-6 flex flex-row items-center justify-between pb-2">
+              <h3 class="tracking-tight text-sm font-medium">Closed</h3>
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i>
+            </div>
+            <div class="p-6 pt-0">
+              <div class="text-2xl font-bold" id="metricClosed">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm lg:col-span-4 flex flex-col">
+            <div class="p-6 flex flex-col space-y-1.5"><h3 class="font-semibold leading-none tracking-tight">Sentiment Breakdown</h3></div>
+            <div class="p-6 pt-0 flex-1 space-y-4" id="sentimentBars">
+              <!-- Dynamically inserted sentiment bars -->
+              <p class="text-sm text-muted-foreground text-center">Loading sentiment data...</p>
+            </div>
+          </div>
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm lg:col-span-3 flex flex-col">
+            <div class="p-6 flex flex-col space-y-1.5"><h3 class="font-semibold leading-none tracking-tight">Top Intents</h3></div>
+            <div class="p-6 pt-0 flex-1 space-y-4" id="intentBars">
+               <!-- Dynamically inserted intent bars -->
+               <p class="text-sm text-muted-foreground text-center">Loading intents...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tickets Panel -->
+      <div class="panel hidden" id="panel-tickets">
+        <div class="mb-8 flex items-end justify-between">
+          <div>
+            <h1 class="text-3xl font-bold tracking-tight">Tickets</h1>
+            <p class="text-muted-foreground">Manage and track support tickets</p>
+          </div>
+        </div>
+        
+        <div class="rounded-xl border bg-card text-card-foreground shadow-sm">
+          <div class="p-4 border-b flex gap-2 overflow-x-auto scrollbar-hide">
+            <button class="filter-btn active inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-muted bg-primary text-primary-foreground h-9 px-4" data-status="all" onclick="filterTicketsT(this, 'all')">All</button>
+            <button class="filter-btn inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-muted bg-transparent h-9 px-4 border" data-status="open" onclick="filterTicketsT(this, 'open')">Open</button>
+            <button class="filter-btn inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-muted bg-transparent h-9 px-4 border" data-status="in_progress" onclick="filterTicketsT(this, 'in_progress')">In Progress</button>
+            <button class="filter-btn inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-muted bg-transparent h-9 px-4 border" data-status="escalated" onclick="filterTicketsT(this, 'escalated')">Escalated</button>
+            <button class="filter-btn inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-muted bg-transparent h-9 px-4 border" data-status="closed" onclick="filterTicketsT(this, 'closed')">Closed</button>
+          </div>
+          <div class="relative w-full overflow-auto">
+            <table class="w-full caption-bottom text-sm">
+              <thead class="[&_tr]:border-b">
+                <tr class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground w-[80px]">#</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Issue</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Customer</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Priority</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Created</th>
+                  <th class="h-10 px-4 align-middle font-medium text-muted-foreground"></th>
+                </tr>
+              </thead>
+              <tbody class="[&_tr:last-child]:border-0" id="ticketsTableBody">
+                <tr><td colspan="7" class="p-4 align-middle text-center text-muted-foreground">Loading tickets...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Orders Panel -->
+      <div class="panel hidden" id="panel-orders">
+        <div class="mb-8 flex items-end justify-between">
+          <div>
+            <h1 class="text-3xl font-bold tracking-tight">Orders</h1>
+            <p class="text-muted-foreground">View order data for AI lookup testing</p>
+          </div>
+        </div>
+        <div class="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+          <div class="relative w-full overflow-auto">
+            <table class="w-full caption-bottom text-sm">
+              <thead class="bg-muted/50">
+                <tr class="border-b transition-colors">
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Order ID</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Customer</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Items</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Total</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Payment</th>
+                </tr>
+              </thead>
+              <tbody id="ordersTableBody">
+                <tr><td colspan="6" class="p-4 text-center text-muted-foreground">Loading orders...</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users Panel -->
+      <div class="panel hidden" id="panel-users">
+        <div class="mb-8 flex items-end justify-between">
+          <div>
+            <h1 class="text-3xl font-bold tracking-tight">Users</h1>
+            <p class="text-muted-foreground">Manage agents and admin accounts</p>
+          </div>
+          <button class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4" onclick="openModal('createUserModal')">
+            <i data-lucide="plus" class="w-4 h-4 mr-2"></i> Add User
+          </button>
+        </div>
+        <div class="rounded-xl border bg-card text-card-foreground shadow-sm overflow-hidden">
+          <div class="relative w-full overflow-auto">
+            <table class="w-full caption-bottom text-sm">
+              <thead class="bg-muted/50">
+                <tr class="border-b transition-colors">
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Name</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Email</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Role</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Team</th>
+                  <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                  <th class="h-10 px-4 align-middle"></th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr><td colspan="6" class="p-4 text-center text-muted-foreground">Loading users...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="usersPagination"></div>
+        </div>
+      </div>
+
+      <!-- Products Panel -->
+      <div class="panel hidden" id="panel-products">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold tracking-tight">Products</h1>
+          <p class="text-muted-foreground">Manage the product catalog for context</p>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-3 items-start">
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm lg:col-span-1">
+            <div class="p-6 flex flex-col space-y-1.5 border-b">
+              <h3 class="font-semibold leading-none tracking-tight">Upload Product CSV</h3>
+              <p class="text-sm text-muted-foreground mt-1">Fields: name, category, price, description, stock_count</p>
+            </div>
+            <div class="p-6">
+              <form id="productUploadForm" onsubmit="uploadProducts(event)" class="space-y-4">
+                <input type="file" accept=".csv" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" id="productFile" required>
+                <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 w-full">Upload & Import</button>
+              </form>
+              <div id="productUploadResult"></div>
+            </div>
+          </div>
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm lg:col-span-2 overflow-hidden">
+            <div class="relative w-full overflow-auto">
+              <table class="w-full caption-bottom text-sm">
+                <thead class="bg-muted/50">
+                  <tr class="border-b transition-colors">
+                    <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Product Name</th>
+                    <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Category</th>
+                    <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Price</th>
+                    <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Stock</th>
+                    <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                    <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="productsTableBody">
+                  <tr><td colspan="6" class="p-4 text-center text-muted-foreground">Loading products...</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="productsPagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Documents Panel -->
+      <div class="panel hidden" id="panel-documents">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold tracking-tight">Documents</h1>
+          <p class="text-muted-foreground">Upload FAQ and unstructured knowledge for RAG</p>
+        </div>
+
+        <div class="grid gap-6 lg:grid-cols-3 items-start">
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm lg:col-span-1">
+            <div class="p-6 flex flex-col space-y-1.5 border-b">
+              <h3 class="font-semibold leading-none tracking-tight">Upload Document</h3>
+              <p class="text-sm text-muted-foreground mt-1">Accepts PDF or TXT.</p>
+            </div>
+            <div class="p-6">
+              <form id="docUploadForm" onsubmit="uploadDocument(event)" class="space-y-4">
+                <input type="file" accept=".pdf,.txt" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring" id="docFile" required>
+                <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 w-full">Upload & Index</button>
+              </form>
+              <div id="docUploadResult"></div>
+            </div>
+          </div>
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm lg:col-span-2 overflow-hidden">
+            <div class="relative w-full overflow-auto">
+              <table class="w-full caption-bottom text-sm">
+                <thead class="bg-muted/50">
+                  <tr class="border-b transition-colors">
+                    <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Filename</th>
+                    <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Type</th>
+                    <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Indexed Chunks</th>
+                    <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Date</th>
+                    <th class="h-10 px-4 text-left align-middle font-medium text-muted-foreground">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="docsTableBody">
+                  <tr><td colspan="5" class="p-4 text-center text-muted-foreground">Loading documents...</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="docsPagination"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Panel -->
+      <div class="panel hidden" id="panel-settings">
+        <div class="mb-8">
+          <h1 class="text-3xl font-bold tracking-tight">Settings</h1>
+          <p class="text-muted-foreground">Configure chatbot identity and behavior</p>
+        </div>
+        
+        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div class="rounded-xl border bg-card text-card-foreground shadow-sm lg:col-span-2">
+            <form onsubmit="saveSettings(event)" class="divide-y">
+               <div class="p-6 space-y-4">
+                  <h3 class="font-semibold leading-none tracking-tight">Identity & Tone</h3>
+                  <div class="grid gap-2">
+                    <label class="text-sm font-medium">Bot Name</label>
+                    <input type="text" id="settingBotName" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="e.g. niRvAG Assistant">
+                  </div>
+                  <div class="grid gap-2">
+                    <label class="text-sm font-medium">Avatar URL</label>
+                    <input type="text" id="settingLogoUrl" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="https://example.com/avatar.png">
+                  </div>
+                  <div class="grid gap-2">
+                    <label class="text-sm font-medium">Welcome Message</label>
+                    <textarea id="settingWelcome" class="flex min-h-[80px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="Hello! How can I help?"></textarea>
+                  </div>
+               </div>
+               <div class="p-6 bg-muted/20">
+                  <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4">Save Changes</button>
+               </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Create User Modal -->
+  <div id="createUserModal" class="hidden fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-lg rounded-xl border bg-card text-card-foreground shadow-lg flex flex-col relative overflow-hidden outline-none max-h-[90vh] overflow-y-auto">
+      <div class="p-6 flex flex-col space-y-1.5 border-b">
+        <h3 class="font-semibold leading-none tracking-tight">Create User</h3>
+        <p class="text-sm text-muted-foreground mt-1">Add a new agent or admin to your team.</p>
+        <button onclick="closeModal('createUserModal')" class="absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100"><i data-lucide="x" class="h-4 w-4"></i></button>
+      </div>
+      <form onsubmit="createUser(event)" class="p-6 space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <div class="grid gap-2">
+            <label class="text-sm font-medium leading-none">Full Name</label>
+            <input type="text" id="newUserName" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="e.g. Ravi Kumar" required>
+          </div>
+          <div class="grid gap-2">
+            <label class="text-sm font-medium leading-none">Email</label>
+            <input type="email" id="newUserEmail" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="agent@nirvag.com" required>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="grid gap-2">
+            <label class="text-sm font-medium leading-none">Password</label>
+            <input type="password" id="newUserPassword" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="Min 6 characters" required minlength="6">
+          </div>
+          <div class="grid gap-2">
+            <label class="text-sm font-medium leading-none">Role</label>
+            <select id="newUserRole" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+               <option value="attendee">Agent</option>
+               <option value="admin">Admin</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid gap-2">
+          <label class="text-sm font-medium leading-none">Team / Category</label>
+          <select id="newUserTeam" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring">
+            <option value="order_shipping">🚚 Order & Shipping</option>
+            <option value="billing_payments">💳 Billing & Payments</option>
+            <option value="technical_support">🔧 Technical Support</option>
+            <option value="product_inquiries">📦 Product Inquiries</option>
+            <option value="general_support">💬 General Support</option>
+          </select>
+          <p class="text-xs text-muted-foreground">Tickets are automatically routed to agents based on their team.</p>
+        </div>
+        <div class="grid gap-2">
+          <label class="text-sm font-medium leading-none">Expertise Keywords</label>
+          <input type="text" id="newUserExpertise" class="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="e.g. orders, shipping, tracking, delivery">
+          <p class="text-xs text-muted-foreground">Comma-separated keywords for AI routing.</p>
+        </div>
+        <div class="grid gap-2">
+          <label class="text-sm font-medium leading-none">Description / Bio</label>
+          <textarea id="newUserDesc" rows="2" class="flex min-h-[60px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="Brief description of agent's responsibilities..."></textarea>
+        </div>
+        <button type="submit" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 w-full mt-4">
+          <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Create User
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Ticket Detail Modal -->
+  <div id="ticketDetailModal" class="hidden fixed inset-0 z-50 bg-background/80 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-3xl rounded-xl border bg-card text-card-foreground shadow-lg flex flex-col relative overflow-hidden outline-none max-h-[90vh]">
+      <div class="p-6 flex items-center justify-between border-b flex-shrink-0">
+        <h3 class="font-semibold leading-none tracking-tight text-lg" id="ticketDetailTitle">Ticket Details</h3>
+        <button onclick="closeModal('ticketDetailModal')" class="rounded-sm opacity-70 hover:opacity-100 transition-opacity"><i data-lucide="x" class="h-5 w-5"></i></button>
+      </div>
+      <div class="p-6 overflow-y-auto flex-1 scrollbar-hide" id="ticketDetailContent">
+        <p class="text-muted-foreground">Loading ticket details...</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container fixed top-4 right-4 z-[100] flex flex-col gap-2" id="toastContainer"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+  <script>
+    lucide.createIcons();
+    // Re-bind modal helper since logic moved here temporarily for tailwind
+    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    
+    // Override filter function to work with new tailwind class logic
+    function filterTicketsT(btn, status) {
+      document.querySelectorAll('.filter-btn').forEach(b => {
+        b.classList.remove('bg-primary', 'text-primary-foreground');
+        b.classList.add('bg-transparent', 'text-foreground');
+      });
+      btn.classList.add('bg-primary', 'text-primary-foreground');
+      btn.classList.remove('bg-transparent', 'text-foreground');
+      
+      // Call core filter
+      if(window.filterTicketsCore) window.filterTicketsCore(status);
+    }
+  </script>
+</body>
+</html>

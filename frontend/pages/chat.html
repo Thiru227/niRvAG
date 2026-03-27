@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Chat — niRvAG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            border: 'hsl(var(--border))',
+            input: 'hsl(var(--input))',
+            ring: 'hsl(var(--ring))',
+            background: 'hsl(var(--background))',
+            foreground: 'hsl(var(--foreground))',
+            primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+            secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
+            destructive: { DEFAULT: 'hsl(var(--destructive))', foreground: 'hsl(var(--destructive-foreground))' },
+            muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
+            accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
+            card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' }
+          },
+          borderRadius: { lg: 'var(--radius)', md: 'calc(var(--radius) - 2px)', sm: 'calc(var(--radius) - 4px)' }
+        }
+      }
+    }
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 10% 3.9%;
+        --radius: 0.5rem;
+      }
+      .dark {
+        --background: 240 10% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 240 10% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 240 5.9% 10%;
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 240 3.7% 15.9%;
+        --muted-foreground: 240 5% 64.9%;
+        --accent: 240 3.7% 15.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 240 4.9% 83.9%;
+      }
+    }
+  </style>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+</head>
+<body class="bg-background text-foreground antialiased min-h-screen flex items-center justify-center p-4">
+
+  <div class="w-full max-w-2xl">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center gap-3">
+        <a href="/" class="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition">
+          <i data-lucide="arrow-left" class="w-4 h-4"></i> Back
+        </a>
+      </div>
+      <button onclick="toggleTheme()" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground h-9 w-9">
+        <i data-lucide="moon" id="themeIcon" class="w-4 h-4"></i>
+      </button>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="rounded-xl border bg-card shadow-lg overflow-hidden" id="chatContainer">
+
+      <!-- Chat Header -->
+      <div class="bg-primary text-primary-foreground p-4 flex items-center gap-3" id="chatHeader">
+        <div class="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center font-bold text-lg" id="botAvatar">N</div>
+        <div>
+          <div class="font-semibold" id="botName">niRvAG Support</div>
+          <div class="text-xs opacity-80">● Online — typically replies instantly</div>
+        </div>
+      </div>
+
+      <!-- Pre-chat Form -->
+      <div id="prechatForm" class="p-6">
+        <h3 class="font-semibold text-lg mb-1">Welcome! 👋</h3>
+        <p class="text-sm text-muted-foreground mb-5">Enter your info to start a test chat with our AI support.</p>
+        <div class="space-y-3">
+          <div>
+            <label class="text-sm font-medium mb-1 block">Your Name</label>
+            <input type="text" id="chatNameInput" value="Test User" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="e.g. Priya">
+          </div>
+          <div>
+            <label class="text-sm font-medium mb-1 block">Your Email</label>
+            <input type="email" id="chatEmailInput" value="test@example.com" class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="e.g. priya@example.com">
+          </div>
+          <button onclick="startTestChat()" class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors bg-primary text-primary-foreground hover:bg-primary/90 shadow h-10 w-full">
+            <i data-lucide="message-square-plus" class="w-4 h-4 mr-2"></i> Start Chat
+          </button>
+        </div>
+      </div>
+
+      <!-- Chat Messages (hidden initially) -->
+      <div id="chatArea" class="hidden flex flex-col" style="height: 520px;">
+        <div id="messagesContainer" class="flex-1 overflow-y-auto p-4 space-y-3 bg-muted/30">
+          <!-- Messages rendered here -->
+        </div>
+        <div class="p-3 border-t bg-card flex gap-2 items-center">
+          <input type="text" id="msgInput" class="flex-1 h-10 rounded-md border border-input bg-background px-3 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring" placeholder="Type your message..." onkeydown="if(event.key==='Enter')sendTestMsg()">
+          <button onclick="toggleMic()" id="micBtn" title="Hold to speak" class="inline-flex items-center justify-center rounded-md border border-input bg-background text-muted-foreground h-10 w-10 transition-colors hover:bg-accent hover:text-accent-foreground">
+            <i data-lucide="mic" class="w-4 h-4"></i>
+          </button>
+          <button onclick="sendTestMsg()" id="sendBtn" class="inline-flex items-center justify-center rounded-md bg-primary text-primary-foreground h-10 w-10 transition-colors hover:bg-primary/90">
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Test Messages -->
+    <div id="quickMessages" class="hidden mt-4">
+      <p class="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-2">Quick Test Messages</p>
+      <div class="flex flex-wrap gap-2">
+        <button onclick="sendQuick(this.dataset.msg)" data-msg="My order #1234 has not arrived yet, it has been 5 days" class="text-xs rounded-full border px-3 py-1.5 hover:bg-muted transition">📦 Delayed order</button>
+        <button onclick="sendQuick(this.dataset.msg)" data-msg="I want a refund for my defective smartwatch" class="text-xs rounded-full border px-3 py-1.5 hover:bg-muted transition">💰 Refund request</button>
+        <button onclick="sendQuick(this.dataset.msg)" data-msg="I cannot login to my account, it keeps showing an error" class="text-xs rounded-full border px-3 py-1.5 hover:bg-muted transition">🔧 Login issue</button>
+        <button onclick="sendQuick(this.dataset.msg)" data-msg="What payment methods do you accept?" class="text-xs rounded-full border px-3 py-1.5 hover:bg-muted transition">💳 Payment info</button>
+        <button onclick="sendQuick(this.dataset.msg)" data-msg="I am really frustrated! This is the WORST service ever!" class="text-xs rounded-full border px-3 py-1.5 hover:bg-muted transition">😡 Angry customer</button>
+        <button onclick="sendQuick(this.dataset.msg)" data-msg="Do you deliver internationally?" class="text-xs rounded-full border px-3 py-1.5 hover:bg-muted transition">🌍 Shipping query</button>
+      </div>
+    </div>
+
+    <!-- Agent Credentials -->
+    <div class="mt-6 rounded-xl border bg-card p-5 shadow-sm">
+      <h3 class="font-semibold text-sm flex items-center gap-2 mb-3">
+        <i data-lucide="key" class="w-4 h-4 text-muted-foreground"></i>
+        Human Agent Credentials
+      </h3>
+      <p class="text-xs text-muted-foreground mb-3">Use these credentials to log in as a human agent and manage tickets.</p>
+      <div class="overflow-hidden rounded-lg border">
+        <table class="w-full text-sm">
+          <thead class="bg-muted/50">
+            <tr class="border-b">
+              <th class="px-3 py-2 text-left font-medium text-muted-foreground text-xs">Agent</th>
+              <th class="px-3 py-2 text-left font-medium text-muted-foreground text-xs">Email</th>
+              <th class="px-3 py-2 text-left font-medium text-muted-foreground text-xs">Password</th>
+              <th class="px-3 py-2 text-left font-medium text-muted-foreground text-xs">Team</th>
+            </tr>
+          </thead>
+          <tbody id="credentialsBody">
+            <tr class="border-b hover:bg-muted/40 transition">
+              <td class="px-3 py-2 font-medium">Admin User</td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">admin@nirvag.com</code></td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">admin123</code></td>
+              <td class="px-3 py-2 text-xs">👑 Admin</td>
+            </tr>
+            <tr class="border-b hover:bg-muted/40 transition">
+              <td class="px-3 py-2 font-medium">Ravi Kumar</td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">ravi@nirvag.com</code></td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">agent123</code></td>
+              <td class="px-3 py-2 text-xs">🚚 Order &amp; Shipping</td>
+            </tr>
+            <tr class="border-b hover:bg-muted/40 transition">
+              <td class="px-3 py-2 font-medium">Priya Sharma</td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">priya@nirvag.com</code></td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">agent123</code></td>
+              <td class="px-3 py-2 text-xs">💳 Billing &amp; Payments</td>
+            </tr>
+            <tr class="border-b hover:bg-muted/40 transition">
+              <td class="px-3 py-2 font-medium">Amit Verma</td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">amit@nirvag.com</code></td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">agent123</code></td>
+              <td class="px-3 py-2 text-xs">🔧 Technical Support</td>
+            </tr>
+            <tr class="border-b hover:bg-muted/40 transition">
+              <td class="px-3 py-2 font-medium">Sneha Patel</td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">sneha@nirvag.com</code></td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">agent123</code></td>
+              <td class="px-3 py-2 text-xs">📦 Product Inquiries</td>
+            </tr>
+            <tr class="hover:bg-muted/40 transition">
+              <td class="px-3 py-2 font-medium">Kiran Nair</td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">kiran@nirvag.com</code></td>
+              <td class="px-3 py-2"><code class="text-xs bg-muted px-1.5 py-0.5 rounded">agent123</code></td>
+              <td class="px-3 py-2 text-xs">💬 General Support</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-3 flex gap-2">
+        <a href="/pages/login.html" class="inline-flex items-center justify-center rounded-md text-xs font-medium border bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3 transition-colors">
+          <i data-lucide="log-in" class="w-3 h-3 mr-1"></i> Agent Login
+        </a>
+        <a href="/pages/admin.html" class="inline-flex items-center justify-center rounded-md text-xs font-medium border bg-background hover:bg-accent hover:text-accent-foreground h-8 px-3 transition-colors">
+          <i data-lucide="shield" class="w-3 h-3 mr-1"></i> Admin Panel
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container fixed top-4 right-4 z-[100]" id="toastContainer"></div>
+
+  <script src="../js/api.js"></script>
+  <script>
+    lucide.createIcons();
+
+    // Theme
+    const saved = localStorage.getItem('nirvag_theme') || 'light';
+    if (saved === 'dark') {
+      document.documentElement.classList.add('dark');
+      document.getElementById('themeIcon').setAttribute('data-lucide', 'sun');
+      lucide.createIcons();
+    }
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.contains('dark');
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('nirvag_theme', isDark ? 'light' : 'dark');
+      document.getElementById('themeIcon').setAttribute('data-lucide', isDark ? 'moon' : 'sun');
+      lucide.createIcons();
+    }
+
+    let sessionId = null;
+    let userName = '';
+    let userEmail = '';
+
+    function startTestChat() {
+      userName = document.getElementById('chatNameInput').value.trim() || 'Test User';
+      userEmail = document.getElementById('chatEmailInput').value.trim();
+      if (!userEmail) { alert('Please enter your email'); return; }
+
+      document.getElementById('prechatForm').classList.add('hidden');
+      document.getElementById('chatArea').classList.remove('hidden');
+      document.getElementById('quickMessages').classList.remove('hidden');
+
+      addMsg('bot', `Hello ${userName}! 👋 I'm niRvAG Support. How can I help you today?`);
+      document.getElementById('msgInput').focus();
+    }
+
+    function addMsg(role, text) {
+      const container = document.getElementById('messagesContainer');
+      const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+      const div = document.createElement('div');
+      div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
+      
+      const bubble = role === 'user'
+        ? `<div class="max-w-[80%] bg-primary text-primary-foreground px-4 py-2.5 rounded-2xl rounded-br-sm text-sm shadow-sm">${text}</div>`
+        : `<div class="max-w-[80%] bg-card border px-4 py-2.5 rounded-2xl rounded-bl-sm text-sm shadow-sm">${text}</div>`;
+      
+      div.innerHTML = `
+        <div class="flex flex-col ${role === 'user' ? 'items-end' : 'items-start'} gap-1">
+          ${bubble}
+          <span class="text-[10px] text-muted-foreground px-1">${time}</span>
+        </div>
+      `;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function addTicketCard(ticket) {
+      const container = document.getElementById('messagesContainer');
+      const div = document.createElement('div');
+      div.className = 'flex justify-start';
+      div.innerHTML = `
+        <div class="max-w-[85%] rounded-xl border bg-card p-4 shadow-sm space-y-2">
+          <div class="flex items-center gap-2 text-sm font-semibold">
+            <span class="text-green-600">✅</span> Ticket Created
+            <span class="text-xs bg-muted px-2 py-0.5 rounded-full font-mono">#${ticket.ticket_number || ''}</span>
+          </div>
+          <div class="grid gap-1 text-xs">
+            <div class="flex justify-between"><span class="text-muted-foreground">Priority</span><span class="font-semibold uppercase">${ticket.priority}</span></div>
+            ${ticket.assigned_to_name ? `<div class="flex justify-between"><span class="text-muted-foreground">Agent</span><span class="font-medium">${ticket.assigned_to_name}</span></div>` : ''}
+            <div class="flex justify-between"><span class="text-muted-foreground">Status</span><span class="font-medium">Open</span></div>
+          </div>
+        </div>
+      `;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function showTypingDots() {
+      const container = document.getElementById('messagesContainer');
+      const div = document.createElement('div');
+      div.id = 'typingDots';
+      div.className = 'flex justify-start';
+      div.innerHTML = `
+        <div class="bg-card border px-4 py-3 rounded-2xl rounded-bl-sm flex gap-1.5 items-center">
+          <div class="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style="animation-delay: 0s"></div>
+          <div class="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style="animation-delay: 0.15s"></div>
+          <div class="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style="animation-delay: 0.3s"></div>
+        </div>
+      `;
+      container.appendChild(div);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function removeTypingDots() {
+      document.getElementById('typingDots')?.remove();
+    }
+
+    async function sendTestMsg() {
+      const input = document.getElementById('msgInput');
+      const message = input.value.trim();
+      if (!message) return;
+
+      input.value = '';
+      addMsg('user', message);
+      showTypingDots();
+
+      const sendBtn = document.getElementById('sendBtn');
+      sendBtn.disabled = true;
+
+      try {
+        const res = await fetch(`${API_BASE}/chat`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message,
+            session_id: sessionId,
+            user_name: userName,
+            user_email: userEmail
+          })
+        });
+        const data = await res.json();
+        removeTypingDots();
+
+        sessionId = data.session_id;
+
+        // Show sentiment badge
+        const sentimentEmoji = { happy: 'Happy', neutral: 'Neutral', frustrated: 'Frustrated', angry: 'Angry' };
+        const reply = data.reply + (data.sentiment && data.sentiment !== 'neutral'
+          ? `<br><span class="inline-flex items-center text-[10px] mt-1 opacity-60">${sentimentEmoji[data.sentiment] || ''} ${data.sentiment}</span>`
+          : '');
+
+        addMsg('bot', reply);
+
+        if (data.ticket_created && data.ticket) {
+          addTicketCard(data.ticket);
+        }
+      } catch (e) {
+        removeTypingDots();
+        addMsg('bot', '❌ Connection error. Is the backend running?');
+        console.error(e);
+      }
+
+      sendBtn.disabled = false;
+      input.focus();
+    }
+
+    function sendQuick(msg) {
+      document.getElementById('msgInput').value = msg;
+      sendTestMsg();
+    }
+
+    // ── ElevenLabs Speech-to-Text ──
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+
+    async function toggleMic() {
+      const micBtn = document.getElementById('micBtn');
+      if (isRecording) {
+        // Stop recording
+        mediaRecorder.stop();
+        isRecording = false;
+        micBtn.classList.remove('bg-red-500', 'text-white', 'border-red-500', 'animate-pulse');
+        micBtn.classList.add('border-input', 'bg-background', 'text-muted-foreground');
+        return;
+      }
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+        audioChunks = [];
+
+        mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) audioChunks.push(e.data); };
+        mediaRecorder.onstop = async () => {
+          stream.getTracks().forEach(t => t.stop());
+          const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+          if (audioBlob.size < 1000) return; // too short
+
+          // Show processing state
+          const input = document.getElementById('msgInput');
+          input.placeholder = '🎙️ Transcribing...';
+          input.disabled = true;
+
+          const formData = new FormData();
+          formData.append('audio', audioBlob, 'recording.webm');
+
+          try {
+            const res = await fetch(`${API_BASE}/stt`, { method: 'POST', body: formData });
+            const data = await res.json();
+            if (data.text) {
+              input.value = data.text;
+              input.placeholder = 'Type your message...';
+              input.disabled = false;
+              input.focus();
+            } else {
+              input.placeholder = 'Type your message...';
+              input.disabled = false;
+              showToast(data.error || 'Could not transcribe', 'error');
+            }
+          } catch (err) {
+            input.placeholder = 'Type your message...';
+            input.disabled = false;
+            showToast('STT failed — check backend', 'error');
+          }
+        };
+
+        mediaRecorder.start();
+        isRecording = true;
+        micBtn.classList.remove('border-input', 'bg-background', 'text-muted-foreground');
+        micBtn.classList.add('bg-red-500', 'text-white', 'border-red-500', 'animate-pulse');
+      } catch (err) {
+        showToast('Microphone access denied', 'error');
+      }
+    }
+
+    function showToast(msg, type) {
+      const c = document.getElementById('toastContainer');
+      if (!c) return;
+      const t = document.createElement('div');
+      t.className = `px-4 py-2 rounded-lg shadow-lg text-sm font-medium mb-2 ${type === 'error' ? 'bg-red-500 text-white' : type === 'success' ? 'bg-green-500 text-white' : 'bg-primary text-primary-foreground'}`;
+      t.textContent = msg;
+      c.appendChild(t);
+      setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 3000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+# Nirvah — AI Customer Support Platform
+
+## Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.env
+*.egg-info/
+dist/
+build/
+venv/
+.venv/
+
+## ChromaDB
+chroma_store/
+
+## IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+## OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+## Temp
+*.tmp
+*.log
