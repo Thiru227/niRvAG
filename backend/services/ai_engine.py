@@ -111,6 +111,38 @@ def process_chat(message: str, user_context: dict, chat_history: list = None) ->
     user_email = user_context.get('user_email', '')
     user_name = user_context.get('user_name', 'Customer')
 
+    # ── Instant small-talk fast path (no AI needed) ──
+    msg_lower = message.strip().lower().rstrip('!?.,:;')
+    GREETINGS = {'hi', 'hello', 'hey', 'hii', 'hiii', 'helo', 'hola', 'howdy', 'yo', 'sup'}
+    THANKS = {'thanks', 'thank you', 'thankyou', 'thx', 'ty', 'thanks a lot', 'thank u'}
+    BYES = {'bye', 'goodbye', 'good bye', 'see you', 'cya', 'see ya', 'take care'}
+    HOW_ARE_YOU = {'how are you', 'how r u', 'how are u', "what's up", "whats up"}
+
+    if msg_lower in GREETINGS:
+        return {
+            'response': f"Hello {user_name}! 👋 Welcome to **niRvAG Support**. How can I help you today?",
+            'intent': 'greeting', 'sentiment': 'happy', 'priority': 'low',
+            'action': 'none', 'ticket_title': None, 'ticket_description': None
+        }
+    if msg_lower in THANKS:
+        return {
+            'response': f"You're welcome, {user_name}! 😊 Is there anything else I can help you with?",
+            'intent': 'thanks', 'sentiment': 'happy', 'priority': 'low',
+            'action': 'none', 'ticket_title': None, 'ticket_description': None
+        }
+    if msg_lower in BYES:
+        return {
+            'response': f"Goodbye, {user_name}! Have a wonderful day. Feel free to reach out anytime you need help! 🙌",
+            'intent': 'farewell', 'sentiment': 'happy', 'priority': 'low',
+            'action': 'none', 'ticket_title': None, 'ticket_description': None
+        }
+    if msg_lower in HOW_ARE_YOU:
+        return {
+            'response': f"I'm doing great, thanks for asking! 😊 I'm here and ready to help you with anything. What can I do for you today?",
+            'intent': 'greeting', 'sentiment': 'happy', 'priority': 'low',
+            'action': 'none', 'ticket_title': None, 'ticket_description': None
+        }
+
     # Gather context sources
     demo_context = load_demo_context()
 

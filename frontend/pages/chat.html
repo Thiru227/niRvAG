@@ -261,15 +261,40 @@
       document.getElementById('msgInput').focus();
     }
 
+    function renderMarkdown(text) {
+      // Escape HTML first
+      let html = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      // Bold: **text**
+      html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      // Italic: *text*
+      html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+      // Inline code: `text`
+      html = html.replace(/`(.+?)`/g, '<code class="bg-muted px-1 py-0.5 rounded text-xs font-mono">$1</code>');
+      // Numbered lists: lines starting with "1. " etc.
+      html = html.replace(/^(\d+)\.\s+(.+)$/gm, '<li class="ml-4 list-decimal">$2</li>');
+      html = html.replace(/(<li class="ml-4 list-decimal">.*<\/li>\n?)+/g, (m) => '<ol class="space-y-1 my-2">' + m + '</ol>');
+      // Bullet lists: lines starting with "• " or "- "
+      html = html.replace(/^[•\-]\s+(.+)$/gm, '<li class="ml-4 list-disc">$1</li>');
+      html = html.replace(/(<li class="ml-4 list-disc">.*<\/li>\n?)+/g, (m) => '<ul class="space-y-1 my-2">' + m + '</ul>');
+      // Line breaks
+      html = html.replace(/\n/g, '<br>');
+      // Clean up <br> inside lists
+      html = html.replace(/<br><\/li>/g, '</li>');
+      html = html.replace(/<\/ol><br>/g, '</ol>');
+      html = html.replace(/<\/ul><br>/g, '</ul>');
+      return html;
+    }
+
     function addMsg(role, text) {
       const container = document.getElementById('messagesContainer');
       const time = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
       const div = document.createElement('div');
       div.className = `flex ${role === 'user' ? 'justify-end' : 'justify-start'}`;
       
+      const rendered = role === 'bot' ? renderMarkdown(text) : text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
       const bubble = role === 'user'
-        ? `<div class="max-w-[80%] bg-primary text-primary-foreground px-4 py-2.5 rounded-2xl rounded-br-sm text-sm shadow-sm">${text}</div>`
-        : `<div class="max-w-[80%] bg-card border px-4 py-2.5 rounded-2xl rounded-bl-sm text-sm shadow-sm">${text}</div>`;
+        ? `<div class="max-w-[80%] bg-primary text-primary-foreground px-4 py-2.5 rounded-2xl rounded-br-sm text-sm shadow-sm">${rendered}</div>`
+        : `<div class="max-w-[80%] bg-card border px-4 py-2.5 rounded-2xl rounded-bl-sm text-sm shadow-sm chat-formatted">${rendered}</div>`;
       
       div.innerHTML = `
         <div class="flex flex-col ${role === 'user' ? 'items-end' : 'items-start'} gap-1">
