@@ -134,12 +134,17 @@ function renderSentiment(data) {
   const el = document.getElementById('sentimentBars');
   const total = Object.values(data).reduce((a, b) => a + b, 0) || 1;
   const order = ['happy', 'neutral', 'frustrated', 'angry'];
-  const labels = { happy: 'Happy', neutral: 'Neutral', frustrated: 'Frustrated', angry: 'Angry' };
+  const labels = { 
+    happy: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline text-green-500 mr-1"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg> Happy', 
+    neutral: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline text-slate-500 mr-1"><circle cx="12" cy="12" r="10"/><line x1="8" x2="16" y1="15" y2="15"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg> Neutral', 
+    frustrated: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline text-amber-500 mr-1"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg> Frustrated', 
+    angry: '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline text-red-500 mr-1"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><path d="M7.5 8 10 9"/><path d="M14 9l2.5-1"/><line x1="9" x2="9.01" y1="12" y2="12"/><line x1="15" x2="15.01" y1="12" y2="12"/></svg> Angry' 
+  };
   const colors = { happy: '#22c55e', neutral: '#64748b', frustrated: '#f59e0b', angry: '#ef4444' };
 
   el.innerHTML = order.map(k => `
     <div class="flex items-center gap-3">
-      <div class="text-sm w-28 text-muted-foreground">${labels[k]}</div>
+      <div class="text-sm w-32 flex items-center text-muted-foreground">${labels[k]}</div>
       <div class="flex-1 bg-muted rounded-full h-2.5 overflow-hidden">
         <div class="h-full rounded-full transition-all duration-500" style="width:${((data[k]||0)/total*100)}%; background:${colors[k]}"></div>
       </div>
